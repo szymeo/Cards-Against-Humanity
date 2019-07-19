@@ -1,0 +1,20 @@
+{
+    "name": "server",
+    "version": "1.0.0",
+    "main": "index.js",
+    "license": "MIT",
+    "scripts": {
+        "start": "nodemon --watch game --watch index.ts --exec ts-node index.ts"
+    },
+    "dependencies": {
+        "@colyseus/monitor": "^0.10.0",
+        "colyseus": "^0.10.8",
+        "consola": "^2.9.0",
+        "express": "^4.17.1",
+        "http": "^0.0.0",
+        "path": "^0.12.7",
+        "serve-index": "^1.9.1",
+        "ts-node": "^8.3.0",
+        "typescript": "^3.5.3"
+    }
+}

@@ -1,0 +1,17 @@
+<div class="hand-cards">
+    <div *ngIf="sliderShown">
+        <div class="swiper-wrapper">
+            <swiper class="swiper-container"
+                style="height: 300px"
+                [config]="config"
+                (indexChange)="onIndexChange($event)"
+                (swiperTransitionStart)="onSwiperEvent('transitionStart')"
+                (swiperTransitionEnd)="onSwiperEvent('transitionEnd')">
+
+                <div *ngFor="let card of cards; let idx = index;" (click)="handleCardClick(card, idx)" class="swiper-slide">
+                    {{card.text}}
+                </div>
+            </swiper>
+        </div>
+    </div>
+</div>

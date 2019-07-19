@@ -1,0 +1,8 @@
+<div class="rooms-list">
+    <h5>Available rooms:</h5>
+
+    <div class="rooms-list--room" (click)="onClick.emit(room)" *ngFor="let room of rooms">
+        <span>{{room.roomId}}</span>
+        <span>{{room.clients}}/{{room.maxClients}}</span>
+    </div>
+</div>

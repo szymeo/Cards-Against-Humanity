@@ -1,0 +1,39 @@
+.game
+
+    &--header
+        padding: 0 24px
+        height: 72px
+        display: flex
+        align-items: center
+        justify-content: space-between
+
+        &--players
+            & .sidenav
+                white-space: nowrap
+                height: 100%
+                width: 0
+                position: fixed
+                z-index: 2
+                top: 0
+                left: 0
+                background-color: #2e3142
+                border-right: 1px solid rgba(255,255,255,0.1)
+                overflow-x: hidden
+                transition: .25s ease
+
+                &.opened
+                    width: 250px
+
+            & .sidenav .closebtn
+                color: rgba(255,255,255,0.4)
+                position: absolute
+                cursor: pointer
+                top: 24px
+                right: 24px
+                font-size: 24px
+
+        &--admin-controls
+            display: flex
+            align-items: center
+            justify-content: flex-end
+

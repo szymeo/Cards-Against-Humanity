@@ -1,0 +1,53 @@
+<div class="game">
+    <ng-container *ngIf="!!room">
+        <div class="game--header">
+            <div class="game--header--players">
+                <div id="mySidenav" class="sidenav" [class.opened]="playersListOpened">
+                    <i class="fas fa-times closebtn" (click)="hidePlayersList()"></i>
+                    <players-list [players]="state.players"></players-list>
+                </div>
+
+                <i (click)="showPlayersList()" style="font-size:24px;cursor:pointer;" class="fas fa-hamburger"></i>
+            </div>
+
+            <div class="game--header--admin-controls">
+                <admin-controls *ngIf="state.playerIsAdmin" (onClick)="dispatchAction($event)" [roomStatus]="state.status"></admin-controls>
+                <master-controls *ngIf="state.playerIsMaster" (onClick)="dispatchAction($event)" [roundStatus]="state.rounds[state.rounds.length - 1]?.status"></master-controls>
+            </div>
+        </div>
+
+        <div class="game--main-card">
+            <main-card *ngIf="state.mainCard" [card]="state.mainCard"></main-card>
+        </div>
+
+        <div class="game--hand-cards">
+            <hand-cards *ngIf="state.handCards" [loop]="!state.playerIsMaster" (onClick)="onHandCardClick($event)"
+                [cards]="state.handCards"></hand-cards>
+        </div>
+    </ng-container>
+
+    <ng-container *ngIf="!room">
+        <rooms-list (onClick)="joinRoom({ room: $event.id })" [rooms]="rooms"></rooms-list>
+    </ng-container>
+
+    <!-- {{room}} -->
+    <!-- <h1>Cards against humanity</h1>
+
+    <div>
+
+        <div class="rooms">
+            <div class="rooms-header">
+                <h5>Available rooms:</h5>
+
+                <div>
+                    <button onclick="refreshRoomsList()">Refresh</button>
+                    <button onclick="createRoom()">Create room</button>
+                </div>
+            </div>
+
+            <div class="rooms-list"></div>
+        </div>
+
+        <game></game>
+    </div> -->
+</div>

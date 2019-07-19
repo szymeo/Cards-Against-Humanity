@@ -1,0 +1,6 @@
+<div class="master-controls">
+    <ng-container [ngSwitch]="roundStatus">
+        <button *ngSwitchCase="'choices_done'" (click)="markReadDone()">Read done</button>
+        <span class="smooth-span">u're master!</span>
+    </ng-container>
+</div>
