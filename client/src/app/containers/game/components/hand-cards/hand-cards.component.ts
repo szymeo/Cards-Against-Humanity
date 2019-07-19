@@ -24,7 +24,7 @@ export class HandCardsComponent implements OnInit, OnChanges {
         followFinger: true,
         allowTouchMove: true,
         preventClicks: true,
-        loop: true,
+        loop: false,
         freeMode: true,
         freeModeMomentum: true,
         freeModeMomentumBounce: false,
@@ -38,13 +38,6 @@ export class HandCardsComponent implements OnInit, OnChanges {
     ngOnInit() {
         console.log('swipe loop enabled:', this.loop);
         console.log('handCards, cards:', this.cards);
-
-        if (this.loop === false) {
-            this.config = {
-                ...this.config,
-                loop: false
-            };
-        }
     }
 
     ngOnChanges(changes: SimpleChanges) {
