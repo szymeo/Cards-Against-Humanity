@@ -1,10 +1,15 @@
-export class Card {
+import { Schema, type } from '@colyseus/schema';
+
+export class Card extends Schema {
+    @type('string')
     text: string;
+
+    @type('number')
     pick: number;
+
+    @type('boolean')
     selected: boolean = false;
 
-    constructor({ text, pick }) {
-        this.text = text;
-        this.pick = pick;
-    }
+    @type('boolean')
+    read: boolean = false;
 }

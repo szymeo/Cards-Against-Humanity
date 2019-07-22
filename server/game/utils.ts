@@ -1,3 +1,5 @@
+import { ArraySchema } from '@colyseus/schema';
+
 import { Card } from './schemas/Card';
 import cardsDb from './data';
 
@@ -21,8 +23,16 @@ export const pickRandomCard = (type: 'main' | 'hand') => {
     return cardContext;
 }
 
-export const generateCardsArraySchema = (type: 'main' | 'hand', length: number = 1) => new Array(length)
+export const generateCardsArraySchema = (type: 'main' | 'hand', length: number = 1) => new ArraySchema(...new Array(length)
     .fill(0)
-    .map(() => new Card(pickRandomCard(type)))
+    .map(() => {
+        const card = new Card();
+        const { text, pick } = pickRandomCard(type);
+
+        card.text = text;
+        card.pick = pick;
+
+        return card;
+    }))
 
 export const randomItem = array => array[Math.floor(Math.random() * array.length)]

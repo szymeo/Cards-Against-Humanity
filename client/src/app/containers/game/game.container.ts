@@ -16,17 +16,17 @@ export const initialState: any = { // !todo move to const file
     styleUrls: ['./game.container.sass']
 })
 export class GameContainer implements OnInit {
-    private wsHost: string = `ws://${window.location.hostname}:2567`;
-
     private client: Client;
     public room: Room;
 
+    private wsHost: string = this.getWsHost();
     public state: any;
     public rooms: Room[];
     public playerNick: string = 'Szymeo';
     public playersListOpened: boolean = false;
 
     constructor() {
+        console.log(location);
         this.client = new Client(this.wsHost);
 
         this.setState(initialState);
@@ -34,6 +34,13 @@ export class GameContainer implements OnInit {
     }
 
     ngOnInit() {
+    }
+
+    private getWsHost(): string {
+        const localWsHost: string = `ws://${window.location.hostname}:2567`;
+        const prodWsHost: string = `wss://${window.location.hostname}`;
+
+        return location.hostname === 'localhost' ? localWsHost : prodWsHost;
     }
 
     public hidePlayersList() {

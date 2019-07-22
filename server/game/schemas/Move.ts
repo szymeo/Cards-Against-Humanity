@@ -1,10 +1,15 @@
+import { Schema, type, ArraySchema } from '@colyseus/schema';
+
+import { Player } from './Player';
 import { Card } from './Card';
 
-export class Move {
-    cards: Card[];
-    votes: string[] = [];
+export class Move extends Schema {
+    @type('string')
+    sessionId?: string;
 
-    constructor({ cards }) {
-        this.cards = cards;
-    }
+    @type([Card])
+    cards = [];
+
+    @type(['string'])
+    votes: ArraySchema<string>;
 }

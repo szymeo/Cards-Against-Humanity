@@ -1,4 +1,4 @@
-import { Client } from 'colyseus'
+import { Client } from '@colyseus/schema/lib/annotations'
 
 export type GameRoomTools = {
     clients: Client[],

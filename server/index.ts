@@ -1,4 +1,4 @@
-import path from 'path';
+import * as path from 'path';
 import express from 'express';
 import serveIndex from 'serve-index';
 import { createServer as httpServer } from 'http';
@@ -37,8 +37,9 @@ gameServer.register('game', GameRoom, {
 // Register CreateOrJoin as 'create_or_join'
 // gameServer.register('create_or_join', CreateOrJoinRoom);
 
-app.use('/', express.static(path.join(__dirname, '../../src/dist')));
-app.use('/', serveIndex(path.join(__dirname, '../../src/dist'), { 'icons': true }))
+// console.log(path.join(__dirname, '../src/dist'))
+app.use('/', express.static(path.join(__dirname, '../client/build')));
+app.use('/', serveIndex(path.join(__dirname, '../client/build'), { 'icons': true }))
 
 // (optional) attach web monitoring panel
 app.use('/colyseus', monitor(gameServer));

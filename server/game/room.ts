@@ -1,7 +1,10 @@
-import { Room, Client } from 'colyseus';
+import { ArraySchema, MapSchema } from '@colyseus/schema';
+import { Client } from '@colyseus/schema/lib/annotations';
+import { Room } from 'colyseus';
 import logger from 'consola';
 
 import { getAction, roomActions, roundActions } from './actions';
+import { Move } from './schemas/Move';
 import { Player } from './schemas/Player';
 import { Round } from './schemas/Round';
 import { State } from './schemas/State';
@@ -14,35 +17,17 @@ export class GameRoom extends Room<State> {
     maxClients: number = 10;
 
     onInit(options) {
-        this.setState({
-            players: {},
-            rounds: [],
-            status: 'created'
-        });
+        // console.log(`GameRoom ${this.roomName} created! Options:`, options);
+
+        this.setState(new State());
     }
 
     requestJoin(options, isNewRoom: boolean) {
         return (options.create) ? (options.create && isNewRoom) : this.clients.length > 0;
     }
 
-    private applyOptsToPlayer(player: Player, options: any) {
+    private addOptsToPlayer(player: Player, options: any) {
         Object.entries(options).filter(([key]) => player.hasOwnProperty(key)).forEach(([key, value]) => player[key] = options[key]);
-    }
-
-    public setRoomAdmin(client: Client, callback: Function) {
-        const action = getAction(client, roomActions.setAdmin);
-
-        logger.info('setRoomAdmin() - action:', action);
-
-        callback(client, action);
-    }
-
-    public sendRoomStatusToAdmin(client: Client, status: RoomStatus, callback: Function) {
-        const action = getAction(client, roomActions.setStatus, status);
-
-        logger.info('sendRoomStatusToAdmin() - action:', action);
-
-        callback(client, action);
     }
 
     public addPlayer(client: Client, options: { nickname: string }): void {
@@ -54,13 +39,13 @@ export class GameRoom extends Room<State> {
             this.sendRoomStatusToAdmin(client, this.state.status, this.send.bind(this));
         }
 
-        this.applyOptsToPlayer(player, options);
+        this.addOptsToPlayer(player, options);
         this.state.players[client.sessionId] = player;
     }
 
     onJoin(client: Client, options: any) {
         this.addPlayer(client, options);
-
+        
         console.log(`GameRoom: ${client.sessionId} joined!`);
     }
 
@@ -169,15 +154,16 @@ export class GameRoom extends Room<State> {
 
     public startRound() {
         logger.info('-- Start round --');
-
         const round = new Round();
         const roundMaster = randomItem(this.clients);
         const client = this.getClientBySessionId(roundMaster.sessionId);
         const action = getAction(client, roundActions.setMaster);
-
+        
+        logger.info('startRound() - action:', action);
         this.send(roundMaster, action);
 
         round.master = roundMaster.sessionId;
+        round.alreadyVoted = new ArraySchema();
         this.state.rounds.push(round);
 
         this.clients.forEach((client) => {
@@ -190,10 +176,10 @@ export class GameRoom extends Room<State> {
 
                 // logger.info('Client ', client.sessionId, 'need', neededCards, 'cards');
 
-                cards = [
+                cards = new ArraySchema(...[
                     ...this.state.players[client.sessionId].cards.filter(c => !c.selected),
                     ...generateCardsArraySchema('hand', neededCards)
-                ];
+                ]);
             }
             
             this.state.players[client.sessionId].cards = cards;
@@ -249,7 +235,7 @@ export class GameRoom extends Room<State> {
         }
     }
 
-    private extractCardsFromMoves(moves: Round['moves']) {
+    private extractCardsFromMoves(moves: MapSchema<Move>) {
         return Object.entries(moves).map(([id, move]) => ({ player: id, card: move.cards[0] }))
     }
 
@@ -264,6 +250,22 @@ export class GameRoom extends Room<State> {
             card.selected = index === cardIndex;
             return card;
         });
+    }
+
+    public setRoomAdmin(client: Client, callback: Function) {
+        const action = getAction(client, roomActions.setAdmin);
+
+        logger.info('setRoomAdmin() - action:', action);
+
+        callback(client, action);
+    }
+
+    public sendRoomStatusToAdmin(client: Client, status: RoomStatus, callback: Function) {
+        const action = getAction(client, roomActions.setStatus, status);
+
+        logger.info('sendRoomStatusToAdmin() - action:', action);
+
+        callback(client, action);
     }
 
     public setPlayerNickname(client: Client, nickname: string) {
@@ -283,7 +285,7 @@ export class GameRoom extends Room<State> {
                 const selectedCard = player.cards.find(card => card.selected);
 
                 return {
-                    cards: [selectedCard],
+                    cards: new ArraySchema(...[selectedCard]),
                     sessionId: id
                 }
             })
