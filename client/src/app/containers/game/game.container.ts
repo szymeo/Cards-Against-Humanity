@@ -37,7 +37,7 @@ export class GameContainer implements OnInit {
     }
 
     private getWsHost(): string {
-        const localWsHost: string = `ws://${window.location.hostname}:2567`;
+        const localWsHost: string = `ws://${window.location.hostname}:1200`;
         const prodWsHost: string = `wss://${window.location.hostname}`;
 
         return location.hostname === 'localhost' ? localWsHost : prodWsHost;

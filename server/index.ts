@@ -11,7 +11,7 @@ import { GameRoom } from './game/room';
 // import { AuthRoom } from './rooms/03-auth';
 // import { CreateOrJoinRoom } from './rooms/04-create-or-join-room';
 
-const port = Number(process.env.PORT || 2567);
+const port = Number(process.env.PORT || 1200);
 const app = express();
 
 // Attach WebSocket Server on HTTP Server.
@@ -41,6 +41,7 @@ gameServer.register('game', GameRoom, {
 app.use('/', express.static(path.join(__dirname, '../client/build')));
 app.use('/', serveIndex(path.join(__dirname, '../client/build'), { 'icons': true }))
 
+app.get('/', (req, res) => res.send('elo'))
 // (optional) attach web monitoring panel
 app.use('/colyseus', monitor(gameServer));
 
@@ -56,3 +57,5 @@ gameServer.onShutdown(function () {
 
 gameServer.listen(port);
 console.log(`Listening on http://localhost:${port}`);
+
+// gameServer.gracefullyShutdown(true);

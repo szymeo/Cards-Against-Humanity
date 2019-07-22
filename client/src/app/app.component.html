@@ -1,15 +1,9 @@
-<!-- <div class="app">
-    <div id="mySidenav" class="sidenav" [class.opened]="navOpened">
-        <a href="javascript:void(0)" class="closebtn" (click)="closeNav()">&times;</a>
-        <a href="#">About</a>
-        <a href="#">Services</a>
-        <a href="#">Clients</a>
-        <a href="#">Contact</a>
-    </div>
-
-    <i (click)="openNav()" style="font-size:24px;cursor:pointer;margin-top:24px;margin-left:24px;" class="fas fa-hamburger"></i>
-
-    <div class="app--game"> -->
+<div class="app">
+    <ng-container *ngIf="online$|async;else offline">
         <app-game></app-game>
-    <!-- </div>
-</div> -->
+    </ng-container>
+
+    <ng-template #offline>
+        <div class="app--offline">You are offline.</div>
+    </ng-template>
+</div>
