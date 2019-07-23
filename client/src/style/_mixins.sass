@@ -1,0 +1,33 @@
+@mixin breakpoint($point)
+    @if $point == xs // phone
+        @media (min-width: 320px)
+            @content
+
+    @if $point == m // tablet portrait
+        @media (min-width: 640px)
+            @content
+
+    @if $point == l // tablet landscape
+        @media (min-width: 1024px)
+            @content
+
+    @if $point == xl // desktop
+        @media (min-width: 1600px)
+            @content
+
+    @if $point == xxl // big desktop
+        @media (min-width: 2800px)
+            @content
+
+@mixin placeholder-color($color)
+    &::-webkit-input-placeholder  /* WebKit browsers */
+        color: $color
+
+    &:-moz-placeholder /* Mozilla Firefox 4 to 18 */
+        color: $color
+
+    &::-moz-placeholder /* Mozilla Firefox 19+ */
+        color: $color
+
+    &:-ms-input-placeholder /* Internet Explorer 10+ */
+        color: $color

@@ -22,18 +22,22 @@ export class GameContainer implements OnInit {
     private wsHost: string = this.getWsHost();
     public state: any;
     public rooms: Room[];
-    public playerNick: string = 'Szymeo';
+    public playerNick: string;
     public playersListOpened: boolean = false;
 
     constructor() {
-        console.log(location);
         this.client = new Client(this.wsHost);
+        this.playerNick = this.getPlayerNick();
 
         this.setState(initialState);
         this.attachClientListeners();
     }
 
     ngOnInit() {
+    }
+
+    private getPlayerNick() {
+        return localStorage.getItem('nickname');
     }
 
     private getWsHost(): string {

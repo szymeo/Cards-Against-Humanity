@@ -1,18 +1,22 @@
 import { ServiceWorkerModule } from '@angular/service-worker';
+import { DeviceDetectorModule } from 'ngx-device-detector';
 import { BrowserModule } from '@angular/platform-browser';
 import { NgModule } from '@angular/core';
-import { DeviceDetectorModule } from 'ngx-device-detector';
+import { FormsModule } from '@angular/forms';
 
 import { AppComponent } from './app.component';
 import { AppRoutingModule } from './app-routing.module';
 import { environment } from '../environments/environment';
-import { ComponentsModule } from './containers/game/game.module';
+import { GameModule } from './modules/game/game.module';
+import { PreLobbyModule } from './modules/pre-lobby/pre-lobby.module';
 
 @NgModule({
     imports: [
         BrowserModule,
+        FormsModule,
         AppRoutingModule,
-        ComponentsModule,
+        GameModule,
+        PreLobbyModule,
         DeviceDetectorModule.forRoot(),
         ServiceWorkerModule.register('ngsw-worker.js', { enabled: environment.production })
     ],

@@ -17,6 +17,7 @@ export class AppComponent implements OnInit, OnDestroy {
     public offlineEvent: Observable<Event>;
     public connectionStatusMessage: string;
     public connectionStatus: string;
+    public playerNick: string;
 
     public online$: Observable<any>;
 
@@ -39,33 +40,22 @@ export class AppComponent implements OnInit, OnDestroy {
             Observable.fromEvent(window, 'offline').pipe(mapTo(false))
         );
 
-        // this.online$.subscribe((isOnline) => {
-        //     if (isOnline) {
-        //         console.log(isOnline);
-        //     } else {
-        //         console.log('you are offline');
-        //         console.log(isOnline);
-        //     }
-        // });
-
-        // this.onlineEvent = Observable.fromEvent(window, 'online');
-        // this.offlineEvent = Observable.fromEvent(window, 'offline');
-
-        // this.subs.add(this.onlineEvent.subscribe(() => {
-        //     this.connectionStatusMessage = 'Back to online';
-        //     this.connectionStatus = 'online';
-        //     console.log('Online...');
-        // }));
-
-        // this.subs.add(this.offlineEvent.subscribe(() => {
-        //     this.connectionStatusMessage = 'Connection lost! You are not connected to internet';
-        //     this.connectionStatus = 'offline';
-        //     console.log('Offline...');
-        // }));
+        this.getPlayerNick();
     }
 
     ngOnDestroy() {
         this.subs.unsubscribe();
+    }
+
+    private getPlayerNick() {
+        this.playerNick = localStorage.getItem('nickname') || '';
+    }
+
+    public setPlayerNick(nickname: string) {
+        console.log('setPlayerNick');
+
+        this.playerNick = nickname;
+        localStorage.setItem('nickname', nickname);
     }
 
     public openNav() {

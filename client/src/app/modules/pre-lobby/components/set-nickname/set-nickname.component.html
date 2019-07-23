@@ -1,0 +1,4 @@
+<div class="set-nickname">
+    <input maxlength="20" #nicknameInput type="text" placeholder="Set your nickname" autofocus />
+    <button (click)="onSubmit.emit(nicknameInput.value)">Save nickname</button>
+</div>

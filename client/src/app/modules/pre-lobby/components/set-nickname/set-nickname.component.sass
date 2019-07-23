@@ -1,0 +1,32 @@
+@import '_mixins'
+
+.set-nickname
+    top: 50%
+    left: 50%
+    transform: translate(-50%, -50%)
+    position: absolute
+    padding: 0 24px
+    width: 100%
+    display: flex
+    flex-direction: column
+    border-radius: 4px
+    margin: auto
+    height: 160px
+    align-items: center
+    justify-content: center
+
+    @include breakpoint(l)
+        width: 400px
+        // border: 1px solid rgba(255,255,255,0.1)
+        // background-color: #2e3142
+
+    &>input
+        width: 100%
+        font-size: 1.05em
+        line-height: calc(1.1em + 12px)
+        margin-bottom: 12px
+
+        @include placeholder-color(rgb(255,255,255,0.4))
+
+    &>button
+        align-self: flex-end

@@ -7,6 +7,7 @@ import { Room } from 'colyseus.js';
     styleUrls: ['./rooms-list.component.sass']
 })
 export class RoomsListComponent implements OnInit {
+    @Output() onCreate: EventEmitter<Room> = new EventEmitter();
     @Output() onClick: EventEmitter<Room> = new EventEmitter();
     @Input() rooms: Room[];
 

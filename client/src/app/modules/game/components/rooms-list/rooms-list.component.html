@@ -1,5 +1,9 @@
 <div class="rooms-list">
-    <h5>Available rooms:</h5>
+    <div class="rooms-list--header">
+        <h5>Available rooms</h5>
+
+        <button (click)="onCreate.emit()">Create room</button>
+    </div>
 
     <div class="rooms-list--room" (click)="onClick.emit(room)" *ngFor="let room of rooms">
         <span>{{room.roomId}}</span>

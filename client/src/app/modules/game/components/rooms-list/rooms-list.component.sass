@@ -1,13 +1,24 @@
+@import '_mixins'
+
 .rooms-list
     margin: 44px auto
-    width: 50%
-    padding: 16px 0
+    width: 100%
+    padding: 16px 24px
 
-    &>h5
-        font:
-            weight: 500
-            size: 14px
+    @include breakpoint(xl)
+        width: 50%
+
+    &--header
+        display: flex
+        align-items: center
+        justify-content: space-between
         margin-bottom: 24px
+
+        &>h5
+            font:
+                weight: 500
+                size: 14px
+            margin: 0
 
     &--room
         background-color: #2e3142
@@ -18,8 +29,8 @@
         display: flex
         align-items: center
         justify-content: space-between
-        border-bottom: 1px solid #212330
         margin: auto
+        margin-bottom: 3px
 
         &:hover
             color: #32ffb4

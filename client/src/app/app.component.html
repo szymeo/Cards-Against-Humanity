@@ -1,6 +1,10 @@
 <div class="app">
     <ng-container *ngIf="online$|async;else offline">
-        <app-game></app-game>
+        <set-nickname (onSubmit)="setPlayerNick($event)" *ngIf="!playerNick;else game"></set-nickname>
+
+        <ng-template #game>
+            <app-game></app-game>
+        </ng-template>
     </ng-container>
 
     <ng-template #offline>

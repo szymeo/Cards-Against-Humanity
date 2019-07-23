@@ -5,7 +5,7 @@ body, html
     overflow: hidden
     height: 100%
     width: 100%
-    background-color: #212330
+    background-color: #2e3142
     font-family: 'Montserrat', sans-serif
     color: rgba(255, 255, 255, 0.7)
     padding: 0
@@ -22,6 +22,9 @@ button, input, span.smooth-span
     border: none
     color: rgba(255,255,255,0.75)
 
+input
+    border-bottom: 1px solid rgba(255,255,255,0.1)
+
 button, span.smooth-span
     font-family: 'Montserrat', sans-serif
     letter-spacing: 0.35px
@@ -32,7 +35,22 @@ button, span.smooth-span
     padding: 3px 8px
     /* border: 1px solid rgb(200, 200, 200) */
 
-button:hover
-    /* background-color: #ffffff */
-    color: #fff
+button
+    border-radius: 2px
+    background-color: rgba(255,255,255,0.18)
+
+    &:hover
+        color: #fff
+
+    [disabled]
+        pointer-events: none
+        color: rgba(255,255,255,0.25)
+        background-color: rgba(255,255,255,0.1)
+
+button[icon-btn]
+    padding: 0
+    border-radius: 50%
+
+    &>i
+        font-size: 23px
 
