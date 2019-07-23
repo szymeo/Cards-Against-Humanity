@@ -12,6 +12,8 @@ import { MainCardComponent } from './components/main-card/main-card.component';
 import { MasterControlsComponent } from './components/master-controls/master-controls.component';
 import { RoomsListComponent } from './components/rooms-list/rooms-list.component';
 import { ComponentsModule } from '../../shared/components/components.module';
+import { DialogModule } from '../../shared/components/dialog/dialog.module';
+import { GameSettingsComponent } from './components/game-settings/game-settings.component';
 
 const COMPONENTS = [
     HeaderComponent,
@@ -22,16 +24,22 @@ const COMPONENTS = [
     AdminControlsComponent,
     MainCardComponent,
     MasterControlsComponent,
-    RoomsListComponent
+    RoomsListComponent,
+    GameSettingsComponent
 ];
 
 @NgModule({
     imports: [
         CommonModule,
         SwiperModule,
-        ComponentsModule
+        ComponentsModule,
+        DialogModule
     ],
     declarations: COMPONENTS,
-    exports: COMPONENTS
+    exports: COMPONENTS,
+    entryComponents: [
+        PlayersListComponent,
+        GameSettingsComponent
+    ]
 })
 export class GameModule {}

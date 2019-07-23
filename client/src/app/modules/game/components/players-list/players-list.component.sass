@@ -1,23 +1,33 @@
-.players-list
-    padding: 12px
+@import '_mixins'
 
-    &>h5
-        font:
-            size: 12px
-            weight: 600
-        margin-bottom: 12px
+.players-list
+
+    &--header
+        padding: 0 20px
+        height: 54px
+        display: flex
+        align-items: center
+        justify-content: space-between
+        background-color: #212330
+
+        &>h5
+            font:
+                weight: 600
+                size: 14px
+            margin: 0
 
     &--player
         margin: 4px 0
         border-radius: 4px
-        padding: 10px 0
-        word-wrap: break-word
-        background-color: #2e3142
+        padding: 15px 20px
+        word-wrap: nowrap
         border-bottom: 1px solid rgba(255,255,255,0.1)
         color: rgba(255,255,255,0.85)
         font-weight: 500
         font-size: 13px
-        display: block
+        display: flex
+        align-items: center
+        justify-content: space-between
         line-height: 1.2
 
         &:last-of-type

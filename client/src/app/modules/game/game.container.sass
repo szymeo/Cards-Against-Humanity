@@ -1,39 +1,32 @@
+@import '_mixins'
+
 .game
 
-    &--header
-        padding: 12px
+    &--header, &--room-list--header
+        padding: 0 12px
+        height: 54px
         display: flex
         align-items: center
         justify-content: space-between
         background-color: #212330
 
         &--players
-            & .sidenav
-                white-space: nowrap
-                height: 100%
-                width: 100%
-                position: fixed
-                z-index: 2
-                top: 0
-                left: 0
-                background-color: #3b3e51
-                overflow-x: hidden
-                transition: .2s ease
-                left: -100%
-
-                &.opened
-                    left: 0
-
-            & .sidenav .closebtn
-                color: rgba(255,255,255,0.4)
-                position: absolute
-                cursor: pointer
-                top: 12px
-                right: 12px
-                font-size: 24px
 
         &--admin-controls
             display: flex
             align-items: center
             justify-content: flex-end
+
+    &--main-area
+
+        &--loading
+            position: absolute
+            top: 50%
+            left: 50%
+            transform: translate(-50%, -50%)
+            text-align: center
+
+            &>span
+                display: block
+                margin-top: 24px
 

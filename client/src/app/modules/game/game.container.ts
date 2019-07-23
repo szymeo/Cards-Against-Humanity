@@ -1,8 +1,13 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, OnDestroy } from '@angular/core';
+import { ActivatedRoute } from '@angular/router';
 import { Client, Room } from 'colyseus.js';
+import { Subscription } from 'rxjs';
 
 import { switchCase, isPrimitive } from '../../shared/utils';
 import { setState } from './handlers';
+import { DialogService } from '../../shared/components/dialog/dialog.service';
+import { PlayersListComponent } from './components/players-list/players-list.component';
+import { GameSettingsComponent } from './components/game-settings/game-settings.component';
 
 export const initialState: any = { // !todo move to const file
     players: {},
@@ -15,7 +20,9 @@ export const initialState: any = { // !todo move to const file
     templateUrl: './game.container.html',
     styleUrls: ['./game.container.sass']
 })
-export class GameContainer implements OnInit {
+export class GameContainer implements OnInit, OnDestroy {
+    private subs: Subscription = new Subscription();
+
     private client: Client;
     public room: Room;
 
@@ -25,7 +32,15 @@ export class GameContainer implements OnInit {
     public playerNick: string;
     public playersListOpened: boolean = false;
 
-    constructor() {
+    constructor(
+        private route: ActivatedRoute,
+        private dialogService: DialogService
+    ) {
+        this.subs.add(this.route.queryParams.subscribe((params) => {
+            if (params['room']) {
+                this.joinRoom({ room: params['room'] });
+            }
+        }));
         this.client = new Client(this.wsHost);
         this.playerNick = this.getPlayerNick();
 
@@ -34,6 +49,11 @@ export class GameContainer implements OnInit {
     }
 
     ngOnInit() {
+
+    }
+
+    ngOnDestroy() {
+        this.subs.unsubscribe();
     }
 
     private getPlayerNick() {
@@ -52,7 +72,15 @@ export class GameContainer implements OnInit {
     }
 
     public showPlayersList() {
-        this.playersListOpened = true;
+        this.dialogService.open(PlayersListComponent, {
+            data: { players: this.state.players }
+        });
+    }
+
+    public showSettings() {
+        this.dialogService.open(GameSettingsComponent, {
+            data: {  }
+        });
     }
 
     private getCurrentRound() {
@@ -186,9 +214,19 @@ export class GameContainer implements OnInit {
     }
 
     private attachRoomListeners() {
-        const roomEvents = { ON_JOIN: 'onJoin', ON_STATE_CHANGE: 'onStateChange' }; // !todo move to const file
+        const roomEvents = {
+            ON_JOIN: 'onJoin',
+            ON_STATE_CHANGE: 'onStateChange',
+            ON_ERROR: 'onError',
+            ON_LEAVE: 'onLeave',
+        }; // !todo move to const file
 
         this.room[roomEvents.ON_JOIN].add(() => this.onJoinRoom()); // successfully joined (possibly new) room
+        this.room[roomEvents.ON_LEAVE].add(() => console.log('Client left room.')); // successfully joined (possibly new) room
+        this.room[roomEvents.ON_ERROR].add(() => {
+            this.room = null;
+            console.log('rumerror!');
+        });
         this.room[roomEvents.ON_STATE_CHANGE].add((state: any) => {
             // console.log('wu:', state);
 
@@ -211,9 +249,15 @@ export class GameContainer implements OnInit {
     // --- Client events listeners --- //
 
     private attachClientListeners() {
-        this.client.onOpen.add(() => { console.log('Client Event: _onOpen'); this.refreshRoomsList(); });
+        this.client.onOpen.add(() => {
+            console.log('Client Event: _onOpen');
+            this.refreshRoomsList();
+        });
         this.client.onClose.add(() => console.log('Client Event: _onClose'));
-        this.client.onError.add((err: any) => console.error('Client Error:', err));
+        this.client.onError.add((err: any) => {
+            this.room = null;
+            console.error('Client Error:', err);
+        });
     }
 
     // --- Client methods --- //
@@ -227,11 +271,11 @@ export class GameContainer implements OnInit {
     private refreshRoomsList() {
         this.getRoomsList()
             .then((rooms: Room[]) => {
-                // console.log('Rooms fetched:', rooms);
+                console.log('Rooms fetched:', rooms);
 
-                if (rooms.length === 0) {
-                    this.joinRoom({ create: true });
-                }
+                // if (rooms.length === 0) {
+                //     this.joinRoom({ create: true });
+                // }
 
                 this.rooms = rooms;
             })

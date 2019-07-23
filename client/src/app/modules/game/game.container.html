@@ -1,14 +1,9 @@
 <div class="game">
     <ng-container *ngIf="!!room">
         <div class="game--header">
-            <div class="game--header--players">
-                <div id="mySidenav" class="sidenav" [class.opened]="playersListOpened">
-                    <i class="fas fa-times closebtn" (click)="hidePlayersList()"></i>
-                    <players-list [players]="state.players"></players-list>
-                </div>
-
-                <i (click)="showPlayersList()" style="font-size:24px;cursor:pointer;" class="fas fa-dice-three"></i>
-            </div>
+            <button icon-btn (click)="showPlayersList()">
+                <i class="fas fa-trophy"></i>
+            </button>
 
             <div class="game--header--admin-controls">
                 <admin-controls *ngIf="state.playerIsAdmin" (onClick)="dispatchAction($event)" [roomStatus]="state.status"></admin-controls>
@@ -16,21 +11,32 @@
             </div>
         </div>
 
-        <div class="game--main-card">
+        <div class="game--main-area">
             <main-card *ngIf="state.mainCard;else smoothLoader" [card]="state.mainCard"></main-card>
 
             <ng-template #smoothLoader>
-                <smooth-loader></smooth-loader>
+                <div class="game--main-area--loading">
+                    <smooth-loader></smooth-loader>
+                    <span>Finding more cards...</span>
+                </div>
             </ng-template>
         </div>
 
-        <div class="game--hand-cards">
+        <div class="game--secondary-area">
             <hand-cards *ngIf="state.handCards" (onClick)="onHandCardClick($event)" [cards]="state.handCards"></hand-cards>
         </div>
     </ng-container>
 
     <ng-container *ngIf="!room">
-        <rooms-list (onCreate)="joinRoom({ create: true })" (onClick)="joinRoom({ room: $event.id })" [rooms]="rooms"></rooms-list>
+        <div class="game--room-list">
+            <div class="game--room-list--header">
+                <button icon-btn (click)="showSettings()">
+                    <i class="fas fa-cog"></i>
+                </button>
+            </div>
+
+            <rooms-list (onCreate)="joinRoom({ create: true })" (onClick)="joinRoom({ room: $event.id })" [rooms]="rooms"></rooms-list>
+        </div>
     </ng-container>
 
     <!-- {{room}} -->

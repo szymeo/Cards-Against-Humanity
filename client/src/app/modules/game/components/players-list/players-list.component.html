@@ -1,10 +1,14 @@
 <div class="players-list">
-    <h5>Players:</h5>
+    <div class="players-list--header">
+        <h5>Players:</h5>
+
+        <button icon-btn (click)="commitAction()">
+            <i style="font-size: 20px" class="fas fa-arrow-left"></i>
+        </button>
+    </div>
 
     <div class="players-list--player" *ngFor="let player of players | keyvalue">
-        <span>{{player.value.nickname}}</span> |
-        <!-- <br/> -->
-        <!-- <span>{{player.key}}</span><br/> -->
+        <span>{{player.value.nickname}}</span>
         <span><span style="color:#32ffb4;font-weight:600">{{player.value.score}}</span> pts</span>
     </div>
 </div>

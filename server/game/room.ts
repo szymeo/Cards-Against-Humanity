@@ -45,19 +45,35 @@ export class GameRoom extends Room<State> {
 
     onJoin(client: Client, options: any) {
         this.addPlayer(client, options);
-        
+
         console.log(`GameRoom: ${client.sessionId} joined!`);
     }
 
-    onLeave(client: Client) {
-        this.removePlayer(client.sessionId);
-        
-        console.log(`GameRoom: ${client.sessionId} left!`);
+    async onLeave(client: Client, consented: boolean) {
+        this.state.players[client.sessionId].connected = false;
+
+        try {
+            if (consented) {
+                throw new Error("Consented leave");
+            }
+
+            // allow disconnected client to rejoin into this room until 20 seconds
+            await this.allowReconnection(client, 0);
+
+            // client returned! let's re-activate it.
+            this.state.players[client.sessionId].connected = true;
+
+        } catch (e) {
+            // 20 seconds expired. let's remove the client.
+            this.removePlayer(client.sessionId);
+
+            console.log(`GameRoom: ${client.sessionId} left!`);
+        }
     }
 
     onMessage(client: Client, action: any) {
         console.log('Msg recieved. Action:', action);
-        
+
         switchCase({
             ROOM: switchCase({
                 SET_STATUS: () => {
@@ -65,7 +81,7 @@ export class GameRoom extends Room<State> {
                     this.setRoomStatus(action.status);
                 },
             })(action.type),
-            
+
             ROUND: switchCase({
                 SELECT_CARD: () => this.handleCardSelect(client, action.cardIndex),
                 SET_STATUS: () => this.setRoundStatus(action.status),
@@ -158,7 +174,7 @@ export class GameRoom extends Room<State> {
         const roundMaster = randomItem(this.clients);
         const client = this.getClientBySessionId(roundMaster.sessionId);
         const action = getAction(client, roundActions.setMaster);
-        
+
         logger.info('startRound() - action:', action);
         this.send(roundMaster, action);
 
@@ -168,7 +184,7 @@ export class GameRoom extends Room<State> {
 
         this.clients.forEach((client) => {
             let cards;
-            
+
             if (!this.state.players[client.sessionId].cards || this.state.players[client.sessionId].cards.length === 0) {
                 cards = generateCardsArraySchema('hand', 10);
             } else {
@@ -181,7 +197,7 @@ export class GameRoom extends Room<State> {
                     ...generateCardsArraySchema('hand', neededCards)
                 ]);
             }
-            
+
             this.state.players[client.sessionId].cards = cards;
             this.setHandCards(client, cards);
         });
@@ -189,7 +205,7 @@ export class GameRoom extends Room<State> {
 
     public startGame() {
         this.startRound();
-        
+
         console.log('start game!');
     }
 
@@ -227,7 +243,7 @@ export class GameRoom extends Room<State> {
 
             this.setHandCards(client, this.state.players[id].cards);
         }
-        
+
         if (currentRound.choicesDone === this.clients.length - 1) { // length - 1 bcs there is a master player
             const roundChoices = this.getRoundChoices(currentRound);
             currentRound.setRoundChoices(roundChoices);
