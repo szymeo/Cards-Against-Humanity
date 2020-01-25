@@ -8,7 +8,11 @@
                 (swiperTransitionStart)="onSwiperEvent('transitionStart')"
                 (swiperTransitionEnd)="onSwiperEvent('transitionEnd')">
 
-                <div *ngFor="let card of cards; let idx = index;" (click)="handleCardClick(card, idx)" class="swiper-slide">
+                <div class="swiper-slide"
+                    *ngFor="let card of cards; let idx = index;"
+                    [class.selected]="card.selected"
+                    (click)="handleCardClick(card, idx)">
+
                     {{card.text}}
                 </div>
             </swiper>

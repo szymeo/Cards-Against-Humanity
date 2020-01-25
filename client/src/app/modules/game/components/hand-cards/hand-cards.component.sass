@@ -1,4 +1,7 @@
+@import '_variables'
+
 .swiper-slide
+    position: relative
     background-color: rgba(255,255,255,0.8)
     color: #212330
     // display: inline-block
@@ -11,6 +14,15 @@
     line-height: 1.5
     width: 200px !important
     margin: 0 12px
+
+    &.selected:after
+        content: ''
+        bottom: 0
+        left: 50%
+        position: absolute
+        border: 20px solid rgba(0, 0, 0, 0)
+        border-bottom-color: $primary-red
+        transform: translateX(-50%)
 
 .hand-cards
     height: 300px

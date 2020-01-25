@@ -1,10 +1,8 @@
 import { Observable, Subject } from 'rxjs';
 import { Injectable } from '@angular/core';
 
-import { DialogModule } from './dialog.module';
-
 @Injectable({
-    providedIn: DialogModule
+    providedIn: 'root'
 })
 export class DialogRef {
     private readonly _afterClosed: Subject<any> = new Subject<any>();

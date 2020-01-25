@@ -3,7 +3,7 @@ import { ActivatedRoute } from '@angular/router';
 import { Client, Room } from 'colyseus.js';
 import { Subscription } from 'rxjs';
 
-import { switchCase, isPrimitive } from '../../shared/utils';
+import { switchCase, isPrimitive, randomIntBetween } from '../../shared/utils';
 import { setState } from './handlers';
 import { DialogService } from '../../shared/components/dialog/dialog.service';
 import { PlayersListComponent } from './components/players-list/players-list.component';
@@ -26,11 +26,13 @@ export class GameContainer implements OnInit, OnDestroy {
     private client: Client;
     public room: Room;
 
+    private newLoadingMessageInterval: number = 10000;
     private wsHost: string = this.getWsHost();
     public state: any;
     public rooms: Room[];
     public playerNick: string;
     public playersListOpened: boolean = false;
+    public gameLoadingMessage: string;
 
     constructor(
         private route: ActivatedRoute,
@@ -46,6 +48,7 @@ export class GameContainer implements OnInit, OnDestroy {
 
         this.setState(initialState);
         this.attachClientListeners();
+        this.getGameLoadingMessage();
     }
 
     ngOnInit() {
@@ -246,6 +249,10 @@ export class GameContainer implements OnInit, OnDestroy {
         this.attachRoomListeners();
     }
 
+    public refreshRooms() {
+        return this.refreshRoomsList();
+    }
+
     // --- Client events listeners --- //
 
     private attachClientListeners() {
@@ -282,4 +289,16 @@ export class GameContainer implements OnInit, OnDestroy {
             .catch(console.error);
     }
 
+    private getGameLoadingMessage() {
+        const loadingMessages = [
+            'Sorting, unsorting...',
+            'Ensuring the rules...',
+            'Waiting for others...',
+        ];
+
+        setTimeout(() => {
+            this.gameLoadingMessage = loadingMessages[randomIntBetween(0, loadingMessages.length - 1)];
+            this.getGameLoadingMessage();
+        }, this.newLoadingMessageInterval);
+    }
 }

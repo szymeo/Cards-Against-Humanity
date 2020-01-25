@@ -1,6 +1,6 @@
 <div class="admin-controls">
     <ng-container [ngSwitch]="roomStatus">
-        <button *ngSwitchCase="'created'" (click)="startGame()">Start!</button>
+        <button color="red" *ngSwitchCase="'created'" (click)="startGame()">Start!</button>
         <button icon-btn *ngSwitchCase="'paused'" (click)="unPauseGame()"><i class="far fa-play-circle"></i></button>
         <button icon-btn *ngSwitchDefault (click)="pauseGame()"><i class="far fa-pause-circle"></i></button>
     </ng-container>

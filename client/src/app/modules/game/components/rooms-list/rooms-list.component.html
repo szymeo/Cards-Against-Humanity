@@ -2,11 +2,27 @@
     <div class="rooms-list--header">
         <h5>Available rooms</h5>
 
-        <button (click)="onCreate.emit()">Create room</button>
+        <button (click)="onRoomCreate.emit()">Create room</button>
     </div>
 
-    <div class="rooms-list--room" (click)="onClick.emit(room)" *ngFor="let room of rooms">
-        <span>{{room.roomId}}</span>
-        <span>{{room.clients}}/{{room.maxClients}}</span>
-    </div>
+    <ng-container *ngIf="rooms?.length > 0;else noRooms">
+        <div class="rooms-list--room" (click)="onRoomClick.emit(room)" *ngFor="let room of rooms">
+            <span>{{room.roomId}}</span>
+            <span>{{room.clients}}/{{room.maxClients}}</span>
+        </div>
+    </ng-container>
+
+    <ng-template #noRooms>
+        <div class="no-rooms noselect">
+            <div class="no-hover">
+                <i class="fas fa-door-open"></i>
+                <span>No rooms found</span>
+            </div>
+
+            <button (click)="onRefreshClick.emit()" class="on-hover">
+                <i class="fas fa-redo"></i>
+                <span>Refresh</span>
+            </button>
+        </div>
+    </ng-template>
 </div>

@@ -1,10 +1,12 @@
-import { Component, OnInit, Input, Output, EventEmitter, ViewChild, SimpleChanges, OnChanges } from '@angular/core';
-import { SwiperConfigInterface, SwiperComponent } from 'ngx-swiper-wrapper';
+import { Component, OnInit, Input, Output, EventEmitter, SimpleChanges, OnChanges, ChangeDetectionStrategy } from '@angular/core';
+import { SwiperConfigInterface } from 'ngx-swiper-wrapper';
+import { map, merge } from 'rxjs/operators';
+import { zip } from 'rxjs';
 
 @Component({
     selector: 'hand-cards',
     templateUrl: './hand-cards.component.html',
-    styleUrls: ['./hand-cards.component.sass']
+    styleUrls: ['./hand-cards.component.sass'],
 })
 export class HandCardsComponent implements OnInit, OnChanges {
     @Output() onClick: EventEmitter<any> = new EventEmitter();
@@ -36,11 +38,13 @@ export class HandCardsComponent implements OnInit, OnChanges {
     constructor() { }
 
     ngOnInit() {
-        console.log('swipe loop enabled:', this.loop);
-        console.log('handCards, cards:', this.cards);
+        // console.log('swipe loop enabled:', this.loop);
+        // console.log('handCards, cards:', this.cards);
     }
 
     ngOnChanges(changes: SimpleChanges) {
+        // console.log('ngOnChanges(changes:', changes, ')');
+
         if (changes.cards.currentValue) {
             this.config = { ...this.config, loop: false };
             this.sliderShown = false;

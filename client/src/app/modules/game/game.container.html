@@ -17,7 +17,7 @@
             <ng-template #smoothLoader>
                 <div class="game--main-area--loading">
                     <smooth-loader></smooth-loader>
-                    <span>Finding more cards...</span>
+                    <span>{{gameLoadingMessage || 'Finding more cards...'}}</span>
                 </div>
             </ng-template>
         </div>
@@ -35,7 +35,11 @@
                 </button>
             </div>
 
-            <rooms-list (onCreate)="joinRoom({ create: true })" (onClick)="joinRoom({ room: $event.id })" [rooms]="rooms"></rooms-list>
+            <rooms-list (onRoomCreate)="joinRoom({ create: true })"
+                (onRoomClick)="joinRoom({ room: $event.id })"
+                (onRefreshClick)="refreshRooms()"
+                [rooms]="rooms">
+            </rooms-list>
         </div>
     </ng-container>
 
